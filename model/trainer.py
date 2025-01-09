@@ -135,6 +135,8 @@ class Trainer:
                 "p75": percentile_errors[2],
                 "p90": percentile_errors[3],
                 "p95": percentile_errors[4]
-            }
+            },
+            "predictions": predictions,
+            "actuals": actuals
         }
 

@@ -8,7 +8,6 @@ env/
 .ipynb_checkpoints/
 .vscode/
 .idea/
-data/
 *.log
 *.tmp
 *.swp
@@ -26,3 +25,4 @@ coverage.xml
 .env
 *.DS_Store
 Thumbs.db
+
