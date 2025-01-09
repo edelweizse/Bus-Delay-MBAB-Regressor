@@ -9,6 +9,3 @@ class Config():
     BUS_STOP_DELAY_CSV = os.path.join(RAW_DATA, "bus_stop_delay_history.csv")
 
     PROCESSED_DATA_CSV = os.path.join(PROCESSED_DATA, "features.csv")
-
-    VIS_OUTPUT = "output/visualizations"
-
