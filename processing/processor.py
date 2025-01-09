@@ -53,7 +53,7 @@ class DataProcessor:
         delay_data["time_of_day_cos"] = np.cos(2 * np.pi * delay_data["time_of_day"] / 24)
 
         delay_data["is_rush_hour"] = ((delay_data["hour"] >= 7) & (delay_data["hour"] <= 10) | 
-                                      (delay_data["hour"] >= 16) & (delay_data["hour"] <= 19))
+                                      (delay_data["hour"] >= 16) & (delay_data["hour"] <= 19)).replace({True: 1, False: 0})
         
         # Stop features
         stop_features = delay_data.groupby("bus_stop_id").agg({
@@ -66,7 +66,7 @@ class DataProcessor:
 
         ## Calculate if stop is frequent
         mean_delays = stop_features["stop_delay_count"].mean()
-        stop_features["is_frequent_delay_stop"] = stop_features["stop_delay_count"] > mean_delays
+        stop_features["is_frequent_delay_stop"] = (stop_features["stop_delay_count"] > mean_delays).replace({True: 1, False: 0})
 
         # Bus features
         bus_features = delay_data.groupby("bus_id").agg({
@@ -122,6 +122,8 @@ class DataProcessor:
         features_df.to_csv(self.config.PROCESSED_DATA_CSV, index = False)
 
         print(f"Extracted {features_df.shape[1]} features for {features_df.shape[0]} instances")
+
+        return features_df
 
         
         
