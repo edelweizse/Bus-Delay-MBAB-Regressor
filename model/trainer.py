@@ -1,7 +1,41 @@
 import torch 
 import torch.nn as nn
 import torch.optim as optim
+from torch.utils.data import DataLoader, random_split
 import numpy as np
+
+def prepare_data(dataset):
+    dataset_size = len(dataset)
+    train_size = int(0.7 * dataset_size)
+    val_size = int(0.2 * dataset_size)
+    test_size = dataset_size - train_size - val_size
+
+    train_data, val_data, test_data = random_split(dataset, [train_size, val_size, test_size])
+
+    train_loader = DataLoader(
+        train_data,
+        32,
+        True,
+        num_workers = 3
+    )
+
+    val_loader = DataLoader(
+        val_data,
+        32,
+        False,
+        num_workers = 3
+    )
+
+    test_loader = DataLoader(
+        test_data,
+        32,
+        False,
+        num_workers = 3
+    )
+
+    return train_loader, val_loader, test_loader
+
+
 
 def train_regressor(model, train_loader, val_loader, epochs = 50):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -66,7 +100,7 @@ def train_regressor(model, train_loader, val_loader, epochs = 50):
 
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
-            torch.save(model.state_dict(), "best_regressor.pth")
+            torch.save(model.state_dict(), "best_regressor.pt")
 
 def evaluate_predictions(model, test_loader):
     device = ("cuda" if torch.cuda.is_available() else "cpu")
